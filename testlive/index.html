@@ -1,6 +1,6 @@
 <body>
 <center><h1 id='status'>Status</h1></center>
-<center><h1 id='url'>Status</h1></center>
+<center><h1 id='url'>Yo URL</h1></center>
 <button id="liveButton">Create Live Stream To Facebook</button>
 <script>
 
@@ -33,17 +33,17 @@ document.getElementById('liveButton').onclick = function() {
     phase: 'create',
 }, function(response) {
     if (!response.id) {
-      document.getElementById('status').text() = 'canceled'
+      document.getElementById('status').value = 'canceled'
       return;
     }
-    document.getElementById('url').text() = 'stream url:' + response.secure_stream_url
+    document.getElementById('url').value = 'stream url:' + response.secure_stream_url
     FB.ui({
       display: 'popup',
       method: 'live_broadcast',
       phase: 'publish',
       broadcast_data: response,
     }, function(response) {
-      document.getElementById('status').text() = "video status: \n" + response.status
+      document.getElementById('status').value = "video status: \n" + response.status
     });
   });
 };
