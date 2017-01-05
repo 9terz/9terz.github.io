@@ -11,30 +11,14 @@ crossorigin="anonymous"/>
             display: none;
             max-width: 960px;
         }
-        #input1 {
+        #input {
             width: 0.1px;
             height: 0.1px;
             opacity: 0;
             overflow: hidden;
             position: absolute;
         }
-        #input2 {
-            width: 0.1px;
-            height: 0.1px;
-            opacity: 0;
-            overflow: hidden;
-            position: absolute;
-        }
-        #input1 + label {
-            font-size: 1.25em;
-            font-weight: 700;
-            padding: 50px 120px;
-            color: #666;
-            background-color: #f7f7f7;
-            display: inline-block;
-            cursor: pointer;
-        }
-        #input2 + label {
+        #input + label {
             font-size: 1.25em;
             font-weight: 700;
             padding: 50px 120px;
@@ -57,73 +41,68 @@ crossorigin="anonymous"/>
     <!-- <input id="input1" type="file" name="pic" accept="image/*">
     <label id="label1" for="input1">Choose a Shirt</label> -->
     <br>
-    <input id="input2" type="file" name="pic" accept="image/*">
-    <label id="label2" for="input2">Choose an Image</label>
+    <input id="input" type="file" name="pic" accept="image/*">
+    <label id="label" for="input">Choose an Image</label>
     <br>
     <br>
     <canvas id="canvas" height="0px"></canvas>
     <br>
-    <img id="buffer1" />
-    <img id="buffer2" />
 
 
 <script>
 var ctx = document.getElementById("canvas").getContext("2d");
 var shirt = new Image();
+var pic = new Image();
 shirt.src = "white.jpg";
-shirt.onload = function(){
+shirt.onload = function() {
   ctx.canvas.height = shirt.height/2;
   ctx.canvas.width = shirt.width/2;
-  render1();
+  RenderShirt();
 };
 
-var width = ctx.canvas.width/2 - document.getElementById("buffer2").width/2;
-var height = ctx.canvas.height/2 - document.getElementById("buffer2").height/2
-var x,y;
-document.getElementById("input2").onchange = function() {
-  var reader2 = new FileReader();
-  reader2.onload = function(e) {
-    document.getElementById("buffer2").src = e.target.result;
-    document.getElementById("input2").style.display = 'none';
-    document.getElementById("label2").style.display = 'none';
+var x = ctx.canvas.width/2 - pic.width/2;
+var y = ctx.canvas.height/2 - pic.height/2
+
+document.getElementById("input").onchange = function() {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    pic.src = e.target.result;
+    document.getElementById("input").style.display = 'none';
+    document.getElementById("label").style.display = 'none';
     document.getElementById("ctrlbox").style.display = 'block';
-    x = document.getElementById("buffer2").width
-    y = document.getElementById("buffer2").height
-    render2();
+    RenderPic();
   };
-  reader2.readAsDataURL(this.files[0]);
+  reader.readAsDataURL(this.files[0]);
 };
 
-function render1() {
+function RenderShirt() {
 ctx.drawImage(shirt, 0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-function render2() {
-ctx.drawImage(document.getElementById("buffer2"), width , height , document.getElementById("buffer2").width, document.getElementById("buffer2").height);
+function RenderPic() {
+ctx.drawImage(pic, x , y , pic.width, pic.height);
 }
 
-function posx(){
-  ctx.clearRect(0, 0, ctx.canvas.width, canvas.height);
-  render1();
-  width = document.getElementById("width").value + 1;
-  console.log(width);
-  render2();
+function PosX() {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  RenderShirt();
+  x = document.getElementById("width").value;
+  RenderPic();
 }
 
-function posy(){
-  ctx.clearRect(0, 0, ctx.canvas.width, canvas.height);
-  render1();
-  height = document.getElementById("height").value + 1;
-  console.log(height);
-  render2();
+function PosY() {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  RenderShirt();
+  y = document.getElementById("height").value;
+  RenderPic();
 }
 
-function picsize(){
+function Resize() {
 ctx.clearRect(0, 0, ctx.canvas.width, canvas.height);
-document.getElementById("buffer2").width = x* document.getElementById("scale").value
-document.getElementById("buffer2").height = y* document.getElementById("scale").value
-render1();
-render2();
+pic.width = pic.width* document.getElementById("scale").value
+pic.height = pic.height* document.getElementById("scale").value
+RenderShirt();
+RenderPic();
 }
 
 </script>
@@ -133,7 +112,7 @@ render2();
 <div class='col-md-6 col-md-offset-3'>
 <div id="ctrlbox" >
     LeftRight
-    <input type="range" id="width" min="-50" max="50" step="1" value="10" onchange="posx()" oninput="posx()">
+    <input type="range" id="width" min="-50" max="50" step="1" value="10" onchange="posx()">
     UpDown
     <input type="range" id="height" min="-200" max="200" step="1" value="10" onchange="posy()" oninput="posy()">
     Size
